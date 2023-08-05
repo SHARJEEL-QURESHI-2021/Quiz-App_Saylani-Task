@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Another Way</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <style>
+        body {
+            background-size: cover;
+            background-image: url("https://wallpaperaccess.com/full/1858126.jpg");
+        }
+
+        #main {
+            width: 400px;
+            height: 430px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0.4rem 1rem 1rem -0.4rem rgba(112, 112, 112, 0.849);
+            border-radius: 9px;
+            margin-top: 25px;
+            background-image: linear-gradient(to right, purple, rgb(255, 0, 0));
+            padding-top: 20px;
+            color: white;
+            margin-top: 100px;
+        }
+
+        p {
+            letter-spacing: 2px;
+            display: inline;
+            font-size: xx-large;
+            margin-right: 35px;
+        }
+
+        #cross {
+            font-size: xx-large;
+            margin-right: 20px;
+            color: black;
+            font-weight: bolder;
+        }
+
+        #aln {
+            text-align: end;
+        }
+
+        #bdr-1 {
+            width: 80%;
+            height: 35px;
+            border: 3px solid rgb(255, 255, 255);
+            font-size: x-large;
+            border-radius: 15px;
+            letter-spacing: 5px;
+            padding-top: 5px;
+            margin-top: 80px;
+            color: rgb(255, 255, 255);
+            background-color: orangered;
+        }
+
+        #bdr-2 {
+            width: 80%;
+            height: 35px;
+            border: 3px solid rgb(255, 255, 255);
+            font-size: x-large;
+            border-radius: 15px;
+            letter-spacing: 5px;
+            padding-top: 5px;
+            margin-top: 20px;
+            color: rgb(255, 255, 255);
+            background-color: blue;
+        }
+
+        #google {
+            margin-right: 10px;
+        }
+
+        #face {
+            margin-right: 10px;
+        }
+
+        #cross:hover {
+            cursor: pointer;
+            color: rgb(255, 255, 255);
+        }
+
+        #bdr-1:hover {
+            cursor: pointer;
+            background-color: chartreuse;
+            color: white;
+        }
+
+        #bdr-2:hover {
+            cursor: pointer;
+            background-color: chartreuse;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <div id="main">
+            <div id="aln">
+                <p>Try Another Way</p><i class="fa-solid fa-xmark" id="cross"></i>
+            </div>
+            <br />
+            <br />
+            <div id="bdr-1"><i class="fa-brands fa-google" id="google"></i>Google</div>
+            <div id="bdr-2"><i class="fa-brands fa-facebook" id="face"></i>Facebook</div>
+        </div>
+    </center>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3ZvtJgykA5zlFpKuhnsSq_Ay6HKZlNec",
+            authDomain: "task-e2185.firebaseapp.com",
+            projectId: "task-e2185",
+            storageBucket: "task-e2185.appspot.com",
+            messagingSenderId: "447773639548",
+            appId: "1:447773639548:web:c917761b6d901682781af9",
+            measurementId: "G-0D3K0WGC3G"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const provider = new GoogleAuthProvider(app);
+        const providers = new FacebookAuthProvider(app);
+
+        const google = document.getElementById("bdr-1")
+        google.addEventListener('click', (e) => {
+            signInWithRedirect(auth, provider);
+            getRedirectResult(auth)
+                .then((result) => {
+                    // This gives you a Google Access Token. You can use it to access Google APIs.
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    console.log("Google Token:", token);
+
+                    // The signed-in user info.
+                    const user = result.user;
+                    console.log("Google User:", user);
+
+                    window.location.href = "Quiz.html";
+                    // IdP data available using getAdditionalUserInfo(result)
+                    // ...
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log("Google ErrorCode:", errorCode);
+                    console.log("Google ErrorMessage:", errorMessage);
+
+                    // The email of the user's account used.
+                    const email = error.email;
+                    console.log("Google Email:", email);
+
+                    // The AuthCredential type that was used.
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    console.log("Google Credential:", credential)
+                });
+        });
+
+        const facebook = document.getElementById("bdr-2")
+        facebook.addEventListener('click', () => {
+            getRedirectResult(auth)
+                .then((result) => {
+                    // This gives you a Facebook Access Token. You can use it to access Facebook APIs.
+                    const credential = FacebookAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    console.log("Facebook Token:", token);
+
+                    // The signed-in user info.
+                    const user = result.user;
+                    console.log("Facebook User:", user);
+
+                    window.location.href = "Quiz.html";
+                    // IdP data available using getAdditionalUserInfo(result)
+                    // ...
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log("Facebook ErrorCode:", errorCode);
+                    console.log("Facebook ErrorMessage:", errorMessage);
+
+                    // The email of the user's account used.
+                    const email = error.email;
+                    console.log("Facebook Email:", email);
+
+                    // The AuthCredential type that was used.
+                    const credential = FacebookAuthProvider.credentialFromError(error);
+                    console.log("Facebook Credential:", credential)
+                });
+        })
+
+
+
+        const cross = document.getElementById("cross")
+        cross.addEventListener('click', () => {
+            window.location.href = "./index.html";
+        })
+    </script>
+</body>
+
+</html>
